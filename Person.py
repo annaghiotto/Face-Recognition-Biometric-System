@@ -16,11 +16,6 @@ class Person:
     templates: List["Template"]
     uid: int
 
-    @property
-    def templates_flat(self) -> List["Features"]:
-        # Flattens the templates list into a single list of features
-        return list(chain(*self.templates))
-
     def train_test_split(self, test_size: float) -> ("Person", "Person"):
         """
         Splits the templates into training and testing sets based on the test_size ratio.

@@ -56,12 +56,12 @@ class XGBoostClassifier(Classifier):
         X = [
             template
             for person in data
-            for template in person.templates_flat
+            for template in person.templates
         ]
         y = [
             person.uid
             for person in data
-            for _ in person.templates_flat
+            for _ in person.templates
         ]
 
         X = np.array(X)
@@ -128,7 +128,7 @@ class XGBoostClassifier(Classifier):
 
         # Calculate scores for ROC analysis
         for person in eval_set:
-            for template in person.templates_flat:
+            for template in person.templates:
                 prediction_proba = self.model.predict_proba([template])[0]
                 if prediction_proba[person.uid] >= self.threshold:
                     y_true.append(1)
@@ -173,10 +173,10 @@ class XGBoostClassifier(Classifier):
         Returns:
             int | None: The predicted user ID or None if no prediction meets the threshold.
         """
-        if not person.templates_flat:
+        if not person.templates:
             return None
 
-        X = np.array(person.templates_flat)
+        X = np.array(person.templates)
 
         # Handle missing values
         if np.isnan(X).any():
@@ -209,10 +209,10 @@ class XGBoostClassifier(Classifier):
         Returns:
             bool: True if authenticated successfully, False otherwise.
         """
-        if not person.templates_flat:
+        if not person.templates:
             return False
 
-        random_template = person.templates_flat[np.random.randint(len(person.templates_flat))]
+        random_template = person.templates[np.random.randint(len(person.templates))]
 
         X = np.array([random_template])
 
