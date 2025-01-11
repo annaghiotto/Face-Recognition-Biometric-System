@@ -1,3 +1,4 @@
+import pickle
 from dataclasses import dataclass
 import numpy as np
 
@@ -17,3 +18,12 @@ class FaceEncoder:
         face = face.reshape(self.mean_face.shape)
         face += self.mean_face
         return face
+
+
+def load_face_encoder() -> FaceEncoder:
+    with open("encoder.pkl", "rb") as f:
+        enc = pickle.load(f)  # type: FaceEncoder
+    return enc
+
+
+encoder = load_face_encoder()

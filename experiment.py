@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 from tqdm import tqdm  # Import tqdm for progress bars
 from Classifier import XGBoostClassifier
-from DataSource import GetSBData, GetEcgIDData
+from DataSource import GetFaces
 from utils import train_test_split, k_fold_split
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -80,9 +80,9 @@ def process_combination(args):
     results = []
 
     # Load data for both ECGID and SB sources
-    ecg_id = GetEcgIDData('ecg-id-database-1.0.0', preprocessor, feature_extractor)
+    ecg_id = GetFaces('ecg-id-database-1.0.0', preprocessor, feature_extractor)
     data_ecg_id = list(ecg_id.generator())
-    data_sb = list(GetSBData('SB_ECGDatabase_01', preprocessor, feature_extractor).generator())
+    data_sb = list(GetFaces('SB_ECGDatabase_01', preprocessor, feature_extractor).generator())
 
     for data_source_name, data in [("ECGID", data_ecg_id), ("SB", data_sb)]:
         # Handle k-fold cross-validation
@@ -241,7 +241,7 @@ def process_combination_signal(preprocessor, feature_extractor):
     preprocessor_name = type(preprocessor).__name__
     feature_extractor_name = type(feature_extractor).__name__
 
-    example_sample_generator = GetEcgIDData('ecg-id-database-1.0.0', preprocessor, feature_extractor, raw=True).generator()
+    example_sample_generator = GetFaces('att_faces', preprocessor, feature_extractor, raw=True).generator()
     sample1 = [next(example_sample_generator)]
     sample2 = [next(example_sample_generator)]
 

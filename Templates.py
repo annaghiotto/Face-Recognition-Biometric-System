@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import List
 
 from FeatureExtractor import FeatureExtractor
-from custom_types import Signal, Template
+from custom_types import Image, Template
 from Preprocessor import Preprocessor
 
 
@@ -15,7 +15,7 @@ class TemplatesFactory:
     preprocessor: "Preprocessor"
     feature_extractor: "FeatureExtractor"
 
-    def from_signals(self, signals: List[Signal]) -> List[Template]:
+    def from_signals(self, signals: List[Image]) -> List[Template]:
         """
         Preprocesses raw signals and extracts features to create templates.
 
