@@ -16,7 +16,7 @@ from hmmlearn import hmm
 
 
 @dataclass
-class FeatureExtractor(ABC, FSBase):
+class FeatureExtractor(ABC):
     """
     Abstract base class for feature extractors.
     """
