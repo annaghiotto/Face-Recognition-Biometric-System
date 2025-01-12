@@ -140,20 +140,12 @@ class XGBoostClassifier(Classifier):
                             y_scores.append(element)
 
         fpr, tpr, thresholds = roc_curve(y_true, y_scores)
-        
-        # Filter out zero or near-zero differences in FPR for stability
+
         fpr, tpr = np.array(fpr), np.array(tpr)
-        unique_fpr_indices = np.where(np.diff(fpr) > 1e-6)[0]
-        if len(unique_fpr_indices) < 2:
-            print("Error: Insufficient unique FPR values to compute ROC curve.")
-            eer = None
-            eer_threshold = None
-        else:
-            fnr = 1 - tpr
-            # Find the threshold where the difference between FPR and FNR is smallest
-            eer_index = np.nanargmin(np.abs(fpr - fnr))
-            eer_threshold = thresholds[eer_index]
-            eer = fpr[eer_index]
+        fnr = 1 - tpr
+        eer_index = np.nanargmin(np.abs(fpr - fnr))
+        eer_threshold = thresholds[eer_index]
+        eer = fpr[eer_index]
 
         try:
             auc = roc_auc_score(y_true, y_scores)

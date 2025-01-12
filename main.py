@@ -4,7 +4,7 @@ from FeatureExtractor import EignenFacesExtractor
 from Preprocessor import SimplePreprocessor
 from utils import train_test_split, k_fold_split
 import numpy as np
-faces = [face for face in GetFaces('att_faces', SimplePreprocessor(), EignenFacesExtractor())]
+faces = [face for face in GetFaces('att_faces2', SimplePreprocessor(), EignenFacesExtractor())]
 
 
 for face in faces:
