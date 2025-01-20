@@ -32,7 +32,6 @@ class XGBoostClassifier(Classifier):
     model: xgb.XGBClassifier = field(default=None, init=False)
 
     def __post_init__(self):
-        # Initialize XGBoost model with specific parameters
         self.model = xgb.XGBClassifier(
             objective="multi:softmax",
             verbosity=2,
@@ -141,11 +140,19 @@ class XGBoostClassifier(Classifier):
 
         fpr, tpr, thresholds = roc_curve(y_true, y_scores)
 
+        # Filter out zero or near-zero differences in FPR for stability
         fpr, tpr = np.array(fpr), np.array(tpr)
-        fnr = 1 - tpr
-        eer_index = np.nanargmin(np.abs(fpr - fnr))
-        eer_threshold = thresholds[eer_index]
-        eer = fpr[eer_index]
+        unique_fpr_indices = np.where(np.diff(fpr) > 1e-6)[0]
+        if len(unique_fpr_indices) < 1:
+            print("Error: Insufficient unique FPR values to compute ROC curve.")
+            eer = None
+            eer_threshold = None
+        else:
+            fnr = 1 - tpr
+            # Find the threshold where the difference between FPR and FNR is smallest
+            eer_index = np.nanargmin(np.abs(fpr - fnr))
+            eer_threshold = thresholds[eer_index]
+            eer = fpr[eer_index]
 
         try:
             auc = roc_auc_score(y_true, y_scores)
